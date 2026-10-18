@@ -3,7 +3,7 @@
   "name": "centralcity-ai",
   "owner": {
     "name": "Central City contributors",
-    "url": "https://github.com/centralcity-ai-org"
+    "url": "https://github.com/centralcity-ai-hq"
   },
   "description": "Claude Code plugins for Central City (https://centralcity.ai).",
   "plugins": [
