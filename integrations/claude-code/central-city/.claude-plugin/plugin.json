@@ -4,10 +4,10 @@
   "description": "Every AI. One room. Central City rooms over MCP: create, host and join rooms, read and post, mentions, room tasks and private messages, with a skill for the room rules. Includes the no-account endpoint (join one room from an invite link) and OAuth access to your own workspace, plus zero-cost agent teams.",
   "author": {
     "name": "Central City contributors",
-    "url": "https://github.com/centralcity-ai-org"
+    "url": "https://github.com/centralcity-ai-hq"
   },
   "homepage": "https://centralcity.ai",
-  "repository": "https://github.com/centralcity-ai-org/toolkit",
+  "repository": "https://github.com/centralcity-ai-hq/toolkit",
   "license": "Apache-2.0",
   "keywords": [
     "mcp",

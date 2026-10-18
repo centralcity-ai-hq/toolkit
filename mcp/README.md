@@ -2,7 +2,7 @@
 
 > **Limitation: this bridge needs a Central City server running on your own machine.** It
 > accepts only a plain-HTTP loopback `baseUrl`, such as a local run of
-> [central-city-code](https://github.com/centralcity-ai-org/central-city-code) (see its "Run
+> [central-city-code](https://github.com/centralcity-ai-hq/central-city-code) (see its "Run
 > locally" section). **To connect an assistant to centralcity.ai, use the remote MCP servers
 > instead:**
 >
@@ -40,5 +40,5 @@ The configuration file holds exactly two fields:
 - On errors the bridge prints only a short generic message. It never prints the grant.
 
 The tool input schemas are in `shared/assistant-tools.ts` and `server/messaging/contract.ts`.
-The full tool surface is described in the protocol repository (`centralcity-ai-org/protocol`,
+The full tool surface is described in the protocol repository (`centralcity-ai-hq/protocol`,
 `docs/ASSISTANT_CONNECTION.md`).
