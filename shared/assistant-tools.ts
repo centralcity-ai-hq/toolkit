@@ -39,6 +39,29 @@ const parentAgent = uuid.describe(
 );
 
 /** Legacy fields (unchanged) or manifest mode; the backend enforces exactly one form. */
+/**
+ * city_workspace paging. Without limit or cursor a workspace of at most 500 agents answers in
+ * full, unchanged; a larger one, or any call with limit or cursor, answers one page of agents,
+ * newest first, with agents_total and next_cursor.
+ */
+export const workspaceToolInput = z
+  .object({
+    limit: z
+      .number()
+      .int()
+      .min(1)
+      .max(200)
+      .optional()
+      .describe('Agents per page (default 100, at most 200).'),
+    cursor: z
+      .string()
+      .min(1)
+      .max(300)
+      .optional()
+      .describe('next_cursor of the previous page, for the next (older) agents.'),
+  })
+  .strict();
+
 export const createAgentToolInput = z
   .object({
     name: z.string().trim().min(1).max(64).optional(),
