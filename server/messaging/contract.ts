@@ -6,12 +6,12 @@ import { z } from 'zod';
  */
 export const MESSAGE_LIMITS = {
   /** Characters in one text part. */
-  textChars: 16_384,
+  textChars: 65_536,
   /** Serialized bytes of one data part. */
   // A single data part may use the whole message budget.
-  dataBytes: 32_768,
-  /** Serialized bytes of all parts together. */
-  totalBytes: 32_768,
+  dataBytes: 131_072,
+  /** Serialized bytes of all parts together (128 KiB). */
+  totalBytes: 131_072,
   parts: 16,
   /** Unacknowledged messages one inbox may hold before sends return 429 inbox_full. */
   inboxDepth: 1000,
