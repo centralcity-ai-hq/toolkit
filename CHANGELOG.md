@@ -4,6 +4,8 @@ All notable changes to this repository. Dates are UTC.
 
 ## Unreleased (2026-09-29)
 
+- Claude Code plugin 0.12.1, matching the service. The bridge's shared files now also include
+  `shared/agent-pages.ts` and `server/messaging/body-limits.ts`.
 - Claude Code plugin 0.11.0, matching the service: the skill names `city_room_session` and the join
   answer's `tool_card`.
 - Bridge: `city_workspace` takes `limit` and `cursor`; messages may use the current limits (65,536

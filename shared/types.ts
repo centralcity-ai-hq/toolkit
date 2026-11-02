@@ -29,6 +29,8 @@ export interface Agent {
   manifestHash?: string;
   revision?: number;
   createdBy?: AgentCreator;
+  /** Card visibility chosen at creation; absent for agents created without a manifest. */
+  visibility?: 'private' | 'public';
   /** Lineage: the agent this one was created under, and its distance from the lineage root. */
   parentAgentId?: string | null;
   depth?: number;
@@ -36,6 +38,11 @@ export interface Agent {
   rootSponsor?: string;
   /** When an unclaimed agent was claimed into this workspace. */
   claimedAt?: string;
+  /**
+   * Owner views only: the last 4 characters of the current runtime credential (e.g. "…a91f"), or
+   * null when the agent has none or it was issued before hints were kept.
+   */
+  credentialHint?: string | null;
 }
 export interface Connection {
   id: string;
@@ -87,10 +94,45 @@ export interface WorkflowDetail {
   briefJob: Job;
   checkJob: Job | null;
 }
+/**
+ * Present only on the snapshot of a workspace with more agents than AGENT_PAGES.threshold
+ * (shared/agent-pages.ts). Then `agents` starts with one page (`count` agents, newest first) and
+ * goes on with other agents the snapshot refers to (jobs, workflows, events, connections and
+ * include=), which are there for their names only and are not part of the list.
+ */
+export interface AgentsPageInfo {
+  /** Every agent of the workspace, removed ones included. */
+  total: number;
+  /** Agents that are not removed. */
+  live: number;
+  /** Live agents that are not paused and are online or working. */
+  online: number;
+  /** The page size used. */
+  limit: number;
+  /** How many of `agents`, from the start, are the page. */
+  count: number;
+  /** Pass as ?cursor= to GET /api/agents for the next (older) page; null on the last page. */
+  nextCursor: string | null;
+}
+
+/** One page of the owner's agents (GET /api/agents), newest first. */
+export interface AgentListPage {
+  agents: Agent[];
+  /** Every agent of the workspace, removed ones included. */
+  total: number;
+  /** Agents that match q=, ids= or under= (all of them when none is given). */
+  matched: number;
+  limit: number;
+  /** Pass as ?cursor= with the same q=, ids= or under= for the next page; null on the last page. */
+  nextCursor: string | null;
+}
+
 export interface Snapshot {
   operator: Operator;
   paused: boolean;
   agents: Agent[];
+  /** Paged workspaces only (more than AGENT_PAGES.threshold agents); absent otherwise. */
+  agentsPage?: AgentsPageInfo;
   connections: Connection[];
   jobs: Job[];
   workflows: Workflow[];
@@ -103,6 +145,36 @@ export interface Snapshot {
     operatorAccounts: number;
   };
   serverTime: string;
+}
+
+/** One line of an agent's Activity feed (GET /api/agents/:id/activity), newest first. */
+export type AgentActivityItem =
+  | {
+      kind: 'event';
+      id: string;
+      at: string;
+      type: string;
+      text: string;
+      jobId: string | null;
+    }
+  | {
+      kind: 'run';
+      id: string;
+      /** When the run was requested; the feed is ordered by this, so pages never shift. */
+      at: string;
+      updatedAt: string;
+      completedAt: string | null;
+      status: 'done' | 'running' | 'failed';
+      capability: Capability;
+      /** This agent did the work ('provider') or asked for it ('requester'). */
+      role: 'provider' | 'requester';
+      counterpart: { id: string; name: string | null };
+      error: string | null;
+    };
+export interface AgentActivityPage {
+  items: AgentActivityItem[];
+  /** Pass as ?before= for the next (older) page; null when there is nothing older. */
+  nextBefore: string | null;
 }
 
 export interface WorkspaceExport {
