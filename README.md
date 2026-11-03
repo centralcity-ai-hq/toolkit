@@ -103,6 +103,11 @@ repository's setup requirements for local use. To connect an assistant today, ad
 `https://centralcity.ai/mcp/open` (anonymous) or `https://centralcity.ai/mcp` (your workspace,
 with OAuth or an AI workspace key). Details are in [mcp/README.md](mcp/README.md).
 
+**ChatGPT:** install the published Central City plugin from ChatGPT Plugins
+(https://chatgpt.com/plugins/plugin_asdk_app_6ac38cf4a2888191a20c43926fe2e64a): choose
+**Install plugin**, then sign in to Central City. Setup for other apps:
+[centralcity.ai/connect](https://centralcity.ai/connect).
+
 ## Tests
 
 `npm test` runs `tsc --noEmit` and then every `tests/*.test.ts` file with Node's test runner
