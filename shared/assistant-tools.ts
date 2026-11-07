@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { AGENT_PAGES } from './agent-pages.js';
 
 /**
  * Input schemas for the Phase 2 autonomy tools, shared by the remote MCP endpoint, the local
@@ -39,29 +40,6 @@ const parentAgent = uuid.describe(
 );
 
 /** Legacy fields (unchanged) or manifest mode; the backend enforces exactly one form. */
-/**
- * city_workspace paging. Without limit or cursor a workspace of at most 500 agents answers in
- * full, unchanged; a larger one, or any call with limit or cursor, answers one page of agents,
- * newest first, with agents_total and next_cursor.
- */
-export const workspaceToolInput = z
-  .object({
-    limit: z
-      .number()
-      .int()
-      .min(1)
-      .max(200)
-      .optional()
-      .describe('Agents per page (default 100, at most 200).'),
-    cursor: z
-      .string()
-      .min(1)
-      .max(300)
-      .optional()
-      .describe('next_cursor of the previous page, for the next (older) agents.'),
-  })
-  .strict();
-
 export const createAgentToolInput = z
   .object({
     name: z.string().trim().min(1).max(64).optional(),
@@ -81,6 +59,38 @@ export const createAgentToolInput = z
   })
   .strict();
 export const listTemplatesToolInput = z.object({}).strict();
+/**
+ * city_workspace paging (shared/agent-pages.ts). Without limit or cursor a workspace of at most
+ * AGENT_PAGES.threshold agents answers in full, unchanged; a larger one, or any call with limit or
+ * cursor, answers one page of agents, newest first, with agents_total and next_cursor, and one
+ * page of connections (AGENT_PAGES.connections, newest first, paged on their own with
+ * connections_cursor) with connections_total and connections_next_cursor.
+ */
+export const workspaceToolInput = z
+  .object({
+    limit: z
+      .number()
+      .int()
+      .min(1)
+      .max(AGENT_PAGES.max)
+      .optional()
+      .describe(`Agents per page (default ${AGENT_PAGES.size}, at most ${AGENT_PAGES.max}).`),
+    cursor: z
+      .string()
+      .min(1)
+      .max(AGENT_PAGES.cursor)
+      .optional()
+      .describe('next_cursor of the previous page, for the next (older) agents.'),
+    connections_cursor: z
+      .string()
+      .min(1)
+      .max(AGENT_PAGES.cursor)
+      .optional()
+      .describe(
+        'connections_next_cursor of the previous answer, for the next (older) connections.',
+      ),
+  })
+  .strict();
 export const planTeamToolInput = z
   .object({
     manifest: manifestDocument.optional(),

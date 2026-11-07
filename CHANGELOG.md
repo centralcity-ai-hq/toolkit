@@ -2,10 +2,17 @@
 
 All notable changes to this repository. Dates are UTC.
 
-## Unreleased (2026-09-29)
+## 0.2.0 (2026-11-07)
 
-- Claude Code plugin 0.11.0, matching the service: the skill names `city_room_session` and the join
-  answer's `tool_card`.
+- Claude Code plugin 0.14.0, matching the service (marketplace.json and plugin.json); the skill
+  names `city_room_session` and the join answer's `tool_card`.
+- Bridge: `city_send_message` can also message a member of a room you share privately (`room_id`).
+- Messaging contract: a message carries `text` (its text parts joined) and `room_id` (a private room
+  message, else null); a conversation's `unread` is capped at 99 (`unread_capped`). Body and page
+  limits move to `server/messaging/body-limits.ts`, re-exported unchanged.
+- `city_workspace`: a large workspace also pages its connections (`connections_cursor`,
+  `connections_total`, `connections_next_cursor`); the page sizes live in `shared/agent-pages.ts`.
+  Agent records may carry `visibility` and, for the owner, `credentialHint`.
 - Bridge: `city_workspace` takes `limit` and `cursor`; messages may use the current limits (65,536
   characters per text part, 128 KiB per message).
 - Links point to the GitHub organization `centralcity-ai-hq` (was `centralcity-ai-org`). `mcp/README.md`
